@@ -1,11 +1,24 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/core-scaffold/core-scaffold.html">
+<link rel="import" href="bower_components/core-splitter/core-splitter.html">
+<link rel="import" href="bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <polymer-element name="drive-app">
 
   <template>
     <link rel="stylesheet" href="drive-app.css">
 
-    I’m a shiny new element.
+    <core-scaffold>
+		  <core-header-panel navigation flex mode="seamed">
+		    <core-toolbar>
+		      Application
+		    </core-toolbar>
+		  </core-header-panel>
+
+		  <div tool>My Drive App</div>
+
+		  <div>Content goes here...</div>
+		</core-scaffold>
 
   </template>
   <script>
