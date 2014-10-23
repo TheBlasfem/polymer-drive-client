@@ -2,6 +2,7 @@
 <link rel="import" href="bower_components/core-scaffold/core-scaffold.html">
 <link rel="import" href="bower_components/core-splitter/core-splitter.html">
 <link rel="import" href="bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="bower_components/google-signin/google-signin.html">
 <script src="bower_components/cors-upload-sample/upload.js"></script>
 
 <polymer-element name="drive-app">
@@ -12,7 +13,8 @@
     <core-scaffold>
 		  <core-header-panel navigation flex mode="seamed">
 		    <core-toolbar>
-		      Application
+		      <google-signin on-google-signin-success="{{signedIn}}" on-google-signed-out="{{signedOut}}" clientId="YOUR_CLIENT_ID_GOES_HERE" scopes="https://www.googleapis.com/auth/drive" >
+			    </google-signin>
 		    </core-toolbar>
 		  </core-header-panel>
 
@@ -148,7 +150,15 @@
         if(this.autoUpload) {
           this.uploadFiles(files);
         }
-      }
+      },
+      signedIn: function (e) {
+			  this.accessToken = e.detail.result.access_token;
+			  this.$.loggedin.style.display = 'block';
+			},
+
+			signedOut: function (e) {
+			  this.$.loggedin.style.display = 'none';
+			}
   	});
   </script>
 
