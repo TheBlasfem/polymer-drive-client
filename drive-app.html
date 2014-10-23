@@ -17,7 +17,33 @@
 
 		  <div tool>My Drive App</div>
 
-		  <div>Content goes here...</div>
+		  <div id="loggedin">
+			  <div id="dropzone" on-tap="{{tapSelect}}" on-dragover="{{handleDragOver}}" on-drop="{{handleFileSelect}}">
+			    Drag files to upload
+			    <input type="file" id="files" name="files[]" on-change="{{handleFilePick}}" multiple>
+			  </div>
+			  <core-toolbar layout horizontal id="dropzone-bar">
+				  <div>
+				    <span>Auto-upload</span>
+				    <paper-toggle-button 
+				    checked="{{autoUpload}}">
+				    </paper-toggle-button>
+				  </div>
+
+				  <div>
+				    <button id="upload"
+				    on-click="{{manualUpload}}" 
+				    style="display:{{ autoUpload ? 'none' : 'inline-block' }}">
+				      Upload files
+				    </button>
+				  </div>
+
+				  <div flex></div>
+				  <div>
+				    <div id="status">Ready</div>
+				  </div>
+				</core-toolbar>
+			</div>
 		</core-scaffold>
 
   </template>
