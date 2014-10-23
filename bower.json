@@ -10,6 +10,7 @@
     "polymer": "Polymer/polymer#master",
     "paper-elements": "Polymer/paper-elements#master",
     "core-splitter": "Polymer/core-splitter#master",
-    "core-scaffold": "Polymer/core-scaffold#master"
+    "core-scaffold": "Polymer/core-scaffold#master",
+    "cors-upload-sample": "googledrive/cors-upload-sample#master"
   }
 }

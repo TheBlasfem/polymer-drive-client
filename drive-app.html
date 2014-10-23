@@ -2,6 +2,7 @@
 <link rel="import" href="bower_components/core-scaffold/core-scaffold.html">
 <link rel="import" href="bower_components/core-splitter/core-splitter.html">
 <link rel="import" href="bower_components/paper-toggle-button/paper-toggle-button.html">
+<script src="bower_components/cors-upload-sample/upload.js"></script>
 
 <polymer-element name="drive-app">
 
@@ -43,14 +44,112 @@
 				    <div id="status">Ready</div>
 				  </div>
 				</core-toolbar>
+
+				<div id="file-splitter" horizontal layout>
+				  <div class="panel">
+				    <core-toolbar><div horizontal layout>Queue</div></core-toolbar>
+				    <ul class="filelist">
+				      <template repeat="{{file in uploadList}}">
+				        <li>
+				        <strong>{{file.name}}</strong> {{file.type}}
+				        </li>
+				      </template>
+				    </ul>
+				  </div>
+
+				  <core-splitter></core-splitter>
+
+				  <div class="panel">
+				    <core-toolbar><div horizontal layout>Uploaded</div></core-toolbar>
+
+				    <ul class="filelist">
+				      <template repeat="{{file in uploadedList}}">
+				        <li>
+				        <img src="{{file.iconLink}}"> 
+				        <strong>{{file.title}}</strong>
+				        <p>
+				        <a href="{{file.selfLink}}">Drive URL</a>
+				        <a href="{{file.webContentLink}}">Web URL</a>
+				        </p>
+				        </li>
+				      </template>
+				    </ul>
+				  </div>
+				</div>
 			</div>
 		</core-scaffold>
 
   </template>
   <script>
-  Polymer({
+	  Polymer({
+      uploadList: [],
+      uploadedList: [],
+      autoUpload: false,
 
-  });
+      uploadFiles: function (files) {
+			  var uploadedList = this.uploadedList;
+			  this.$.status.innerHTML = 'Uploading...';
+
+			  var f;
+			  for(var i=0; f = files[i]; i++) {
+			    var uploader = new MediaUploader({
+			      file: f,
+			      token: this.accessToken,
+			      onComplete: function (data) {
+			        uploadedList.push(JSON.parse(data));
+			        this.$.status.innerHTML = 'Upload successful';
+			        this.uploadList = [];
+			      }.bind(this)
+			    });
+			    uploader.upload();
+			  }
+			},
+
+			tapSelect: function (e) {
+			    this.$.files.click();
+			},
+
+			handleDragOver: function (e) {
+			    e.stopPropagation();
+			    e.preventDefault();
+			    e.dataTransfer.dropEffect = 'copy';
+			},
+
+			handleFilePick: function (e) {
+			    e.stopPropagation();
+			    e.preventDefault();
+			    this.selectFiles(e.target.files);
+			},
+
+			handleFileSelect: function (e) {
+			    e.stopPropagation();
+			    e.preventDefault();
+			    this.selectFiles(e.dataTransfer.files);
+			},
+
+			clearUploadList: function () {
+			    this.uploadedList = [];
+			    this.uploadList = [];
+			},
+
+      manualUpload: function () { 
+			  this.uploadFiles(this.queue); 
+			},
+
+      selectFiles: function (files) {
+        this.queue = files;
+        this.$.status.textContent = 'Files selected';
+
+        var f;
+        for(var i=0; f = files[i]; i++) {
+          this.uploadList.push(f);
+        }
+
+        if(this.autoUpload) {
+          this.uploadFiles(files);
+        }
+      }
+  	});
   </script>
 
 </polymer-element>
